@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { firebaseAdmin } from "@/lib/firebaseAdmin"
-import { async } from "@firebase/util"
 
 export default NextAuth({
   providers: [
@@ -11,7 +10,7 @@ export default NextAuth({
         if (idToken) {
           try {
             const decoded = await firebaseAdmin.auth().verifyIdToken(idToken)
-            return { ...decoded }
+            return { ...decoded } as any
           } catch (err) {
             console.error(err)
           }
@@ -22,7 +21,7 @@ export default NextAuth({
   ],
   secret: process.env.SECRET,
   session: {
-    jwt: true,
+    strategy: "jwt",
   },
   jwt: {
     secret: process.env.SECRET,
